@@ -4,10 +4,10 @@
  * Creates database and tables if they don't exist
  */
 
-$host = 'localhost';
-$dbname = 'messenger_db';
-$username = 'root';
-$password = '';
+$host = '185.84.108.3';
+$dbname = 'b108930_mess';
+$username = 'u108930';
+$password = '123QWE!123qwe';
 
 try {
     // Connect to MySQL server (without selecting database)
