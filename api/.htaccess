@@ -1,0 +1,11 @@
+# Apache .htaccess for API URL Rewriting
+# Place this in the api directory to enable clean URLs
+
+RewriteEngine On
+
+# Allow direct access to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route all requests to index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
