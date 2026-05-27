@@ -36,7 +36,7 @@ try {
         
         if (isset($input['text']) && !empty(trim($input['text']))) {
             $text = trim($input['text']);
-            $type_user = isset($input['type_user']) ? $input['type_user'] : 'sender';
+            $type_user = isset($input['type_user']) ? $input['type_user'] : 'admin';
             
             $stmt = $pdo->prepare("INSERT INTO messeges (text, type_user, created_at) VALUES (:text, :type_user, NOW())");
             $stmt->execute([':text' => $text, ':type_user' => $type_user]);
