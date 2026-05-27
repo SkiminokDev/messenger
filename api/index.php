@@ -30,6 +30,33 @@ $method = $_SERVER['REQUEST_METHOD'];
 try {
     $pdo = getDbConnection();
     
+    // Route: POST /api/v1/messeges - Create new message
+    if ($path === '/api/v1/messeges' && $method === 'POST') {
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        if (isset($input['text']) && !empty(trim($input['text']))) {
+            $text = trim($input['text']);
+            
+            $stmt = $pdo->prepare("INSERT INTO messeges (text, created_at) VALUES (:text, NOW())");
+            $stmt->execute([':text' => $text]);
+            
+            $id = (int)$pdo->lastInsertId();
+            
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'id' => $id,
+                    'text' => $text,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]
+            ]);
+        } else {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Text is required']);
+        }
+        exit;
+    }
+    
     // Route: GET /api/v1/messeges - Get all messages
     if ($path === '/api/v1/messeges' && $method === 'GET') {
         $stmt = $pdo->query("SELECT id, text, created_at FROM messeges ORDER BY created_at ASC");

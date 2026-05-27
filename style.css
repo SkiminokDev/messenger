@@ -171,3 +171,79 @@ body {
     color: #999;
     font-size: 14px;
 }
+
+/* Message Input Container */
+.message-input-container {
+    display: flex;
+    padding: 12px 16px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #ddd;
+    gap: 10px;
+}
+
+.message-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.message-input:focus {
+    border-color: #517da2;
+}
+
+.send-button {
+    padding: 10px 20px;
+    background-color: #517da2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover {
+    background-color: #3d6485;
+}
+
+.send-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .messenger-container {
+        height: 100vh;
+    }
+    
+    .message {
+        max-width: 80%;
+    }
+    
+    .messenger-header h1 {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .message {
+        max-width: 85%;
+    }
+    
+    .message-text {
+        font-size: 13px;
+    }
+    
+    .message-input-container {
+        padding: 8px 12px;
+    }
+    
+    .send-button {
+        padding: 10px 16px;
+    }
+}

@@ -18,6 +18,60 @@
     // DOM Elements
     const messagesList = document.getElementById('messagesList');
     const statusIndicator = document.getElementById('statusIndicator');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+
+    /**
+     * Send message via AJAX POST request
+     */
+    async function sendMessage() {
+        const text = messageInput.value.trim();
+        
+        if (!text) {
+            return;
+        }
+        
+        // Disable button while sending
+        sendButton.disabled = true;
+        
+        try {
+            const response = await fetch(API_BASE_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Clear input field
+                messageInput.value = '';
+                // Fetch latest messages to show the new one
+                fetchMessages();
+            } else {
+                console.error('Failed to send message:', result.error);
+            }
+        } catch (error) {
+            console.error('Failed to send message:', error);
+        } finally {
+            sendButton.disabled = false;
+        }
+    }
+
+    /**
+     * Handle Enter key press in message input
+     */
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
 
     /**
      * Format date to readable time string
@@ -158,6 +212,10 @@
 
         // Set up polling interval
         setInterval(fetchMessages, POLLING_INTERVAL);
+        
+        // Add event listeners for message input and send button
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', handleKeyPress);
 
         console.log('Messenger initialized. Polling every', POLLING_INTERVAL, 'ms');
     }
