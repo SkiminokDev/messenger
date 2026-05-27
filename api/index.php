@@ -36,9 +36,10 @@ try {
         
         if (isset($input['text']) && !empty(trim($input['text']))) {
             $text = trim($input['text']);
+            $type_user = isset($input['type_user']) ? $input['type_user'] : 'sender';
             
-            $stmt = $pdo->prepare("INSERT INTO messeges (text, created_at) VALUES (:text, NOW())");
-            $stmt->execute([':text' => $text]);
+            $stmt = $pdo->prepare("INSERT INTO messeges (text, type_user, created_at) VALUES (:text, :type_user, NOW())");
+            $stmt->execute([':text' => $text, ':type_user' => $type_user]);
             
             $id = (int)$pdo->lastInsertId();
             
@@ -47,6 +48,7 @@ try {
                 'data' => [
                     'id' => $id,
                     'text' => $text,
+                    'type_user' => $type_user,
                     'created_at' => date('Y-m-d H:i:s')
                 ]
             ]);
@@ -59,7 +61,7 @@ try {
     
     // Route: GET /api/v1/messeges - Get all messages
     if ($path === '/api/v1/messeges' && $method === 'GET') {
-        $stmt = $pdo->query("SELECT id, text, created_at FROM messeges ORDER BY created_at ASC");
+        $stmt = $pdo->query("SELECT id, text, type_user, created_at FROM messeges ORDER BY created_at ASC");
         $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(['success' => true, 'data' => $messages]);
         exit;
@@ -69,7 +71,7 @@ try {
     if (preg_match('#^/api/v1/messeges/(\d+)$#', $path, $matches) && $method === 'GET') {
         $id = (int)$matches[1];
         
-        $stmt = $pdo->prepare("SELECT id, text, created_at FROM messeges WHERE id = :id");
+        $stmt = $pdo->prepare("SELECT id, text, type_user, created_at FROM messeges WHERE id = :id");
         $stmt->execute([':id' => $id]);
         $message = $stmt->fetch(PDO::FETCH_ASSOC);
         
