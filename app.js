@@ -40,7 +40,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ text: text })
+                body: JSON.stringify({ text: text, type_user: 'sender' })
             });
             
             if (!response.ok) {
@@ -92,7 +92,9 @@
      */
     function createMessageElement(message) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = 'message incoming';
+        // Determine message class based on type_user
+        const messageType = message.type_user === 'admin' ? 'incoming' : 'outgoing';
+        messageDiv.className = `message ${messageType}`;
         messageDiv.dataset.id = message.id;
 
         const textDiv = document.createElement('div');
